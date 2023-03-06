@@ -12,3 +12,16 @@ spring:
           keycloak:
             issuer-uri: http://localhost:8080/auth/realms/local #mein Realm heisst local. Allgemein eignet es sich, fuer verschiedene Umgebungen verschiedene Realms zu bauen. Local heisst das ding jetzt, weil ichs so benannt hab - dev soll auch zugreifen
             user-name-attribute: preferred_username
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8080/auth/realms/local
+          jwk-set-uri: ${spring.security.oauth2.resourceserver.jwt.issuer-uri}/protocol/openid-connect/certs #sonst kriegt er den kack nicht entschluesselt
+
+jwt:
+  auth:
+    converter:
+      resource-id: springboot-keycloak-client
+      principal-attribute: preferred_username
+
+server:
+  port: 8081
