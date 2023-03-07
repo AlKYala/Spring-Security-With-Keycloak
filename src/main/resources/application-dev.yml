@@ -1,21 +1,12 @@
 spring:
+  application:
+    name: springboot-keycloak
   security:
     oauth2:
-      client:
-        registration:
-          keycloak:
-            client-id: login-app # so heisst unser client
-            authorization-grant-type: authorization_code
-            scope:
-              - openid
-        provider:
-          keycloak:
-            issuer-uri: http://localhost:8080/auth/realms/local #mein Realm heisst local. Allgemein eignet es sich, fuer verschiedene Umgebungen verschiedene Realms zu bauen. Local heisst das ding jetzt, weil ichs so benannt hab - dev soll auch zugreifen
-            user-name-attribute: preferred_username
       resourceserver:
         jwt:
-          issuer-uri: http://localhost:8080/auth/realms/local
-          jwk-set-uri: ${spring.security.oauth2.resourceserver.jwt.issuer-uri}/protocol/openid-connect/certs #sonst kriegt er den kack nicht entschluesselt
+          issuer-uri: http://localhost:8080/auth/realms/SpringBootKeycloak #in neueren versionen geht die auth pfad weg
+          jwk-set-uri: ${spring.security.oauth2.resourceserver.jwt.issuer-uri}/protocol/openid-connect/certs
 
 jwt:
   auth:
@@ -23,5 +14,11 @@ jwt:
       resource-id: springboot-keycloak-client
       principal-attribute: preferred_username
 
+logging:
+  level:
+    org.springframework.security: DEBUG
+
 server:
-  port: 8081
+  port: '8081'
+  servlet:
+    context-path: /api
