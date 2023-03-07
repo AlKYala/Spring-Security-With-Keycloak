@@ -23,10 +23,14 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests()
-                .requestMatchers(HttpMethod.GET, "/test/anonymous", "/test/anonymous/**").permitAll()
+                //alles erlaubt
+                .requestMatchers("/test/anonymous", "/test/anonymous/**", "/login/blabla", "/login/blabla/**").permitAll()
+                //braucht admin Rolle
                 .requestMatchers(HttpMethod.GET, "/test/admin", "/test/admin/**").hasRole(ADMIN)
+                //braucht eine der beiden rollen
                 .requestMatchers(HttpMethod.GET, "/test/user").hasAnyRole(ADMIN, USER)
                 .anyRequest().authenticated();
+        //Jwt handling
         http.oauth2ResourceServer()
                 .jwt()
                 .jwtAuthenticationConverter(jwtAuthConverter);
